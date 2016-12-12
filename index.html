@@ -1,117 +1,75 @@
 <!DOCTYPE html>
-<html ng-app="myapp">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
     <title>Title</title>
-    <script src="https://apps.bdimg.com/libs/angular.js/1.4.6/angular.min.js"></script>
-    <style>
-        h1{
-            text-align:center;
-            font-family:"宋体"
-        }
-        .wrap{
-            width:500px;
-            margin:0 auto;
-        }
-        .enterContent{
-            width:500px;
-            height:40px;
-            line-height:40px;
-            border-radius:6px;
-            border:1px solid #eee
-        }
-        .btn{
-            height: 30px;
-            width:100px ;
-            border-style: none;
-            background-color: #fff;
-            border-radius: 3px;
-            border :1px solid #ebebeb;
-            margin-top:20px
-        }
-        .list-item{
-            padding:12px;
-            list-style: none;
-            line-height: 60px;
-        }
-        .close {
-            height: 30px;
-            width:100px ;
-            border-style: none;
-            background-color: #fff;
-            border-radius: 3px;
-            border :1px solid #ebebeb;
-            float: right;
-            margin-top: 16px;
-        }
-        .numbers{
-            margin-right: 10px;
-        }
-        .day{margin-left:20px}
-    </style>
-
+    <link href="lib/ionic/css/ionic.min.css" rel="stylesheet">
+    <script src="lib/ionic/js/ionic.bundle.min.js"></script>
     <script>
-        var myapp=angular.module("myapp",[]);
+        var myapp = angular.module("myapp",[]);// 创建主模块
+        // 注册控制器
         myapp.controller("myCtrl",function($scope){
-            $scope.text="";
-            $scope.todolist=[{
-                text:"JS"
-            },{
-                text:"nodeJS"
-            }];
-            //添加todolist条目
-            $scope.add=function(){
-                var text=$scope.text.trim();
-                if(text){
-                    $scope.todolist.push({
-                        text:text
-                    })
-                    $scope.text="";
-                }
-            }
-            //删除todolist条目
-            $scope.delete=function(item){
-                var index=$scope.todolist.indexOf(item);
-                $scope.todolist.splice(index,1)
+            // 准备数据
+            var starArr = [
+                {value:1,icon:"ion-ios-star-outline"},
+                {value:2,icon:"ion-ios-star-outline"},
+                {value:3,icon:"ion-ios-star-outline"},  // val: 3   index: 2
+                {value:4,icon:"ion-ios-star-outline"},
+                {value:5,icon:"ion-ios-star-outline"}
+            ];
+            $scope.stars = [
+                {id:1,content:angular.copy(starArr)},
+                {id:2,content:angular.copy(starArr)}
+            ];
+            // 响应click事件
+            $scope.setRating = function(id,val){
+                var stars = $scope.stars;
+                
+                // 遍历stars数组，设置每一个元素的icon
+                angular.forEach(stars,function(item){
+                    if(item.id == id){
+                        angular.forEach(item.content,function(arr,index){
+                            arr.icon = index<val? "ion-ios-star":"ion-ios-star-outline";
+                        });
+                    }
+
+                });
             };
-            $scope.day=new Date().toLocaleDateString()
-
-
-        })
+        });
     </script>
 </head>
-<body ng-controller="myCtrl">
-    <!--wrap-->
-<div class="wrap">
-    <!--头部区域-->
-    <header>
-        <h1>待办事项</h1>
-    </header>
-    <!--内容区域-->
-    <section>
-        <form>
-            <input type="text" class="enterContent" ng-model="text" name="">
-            <button class="btn" ng-click="add()">add</button>
-        </form>
-        <ul class="list-item">
-            <!--遍历todolist-->
-            <li ng-repeat="item in todolist">
+<body ng-app="myapp" ng-controller="myCtrl">
+<!--header-->
+<div class="bar bar-header bar-assertive">
+    <h1 class="title">淘宝</h1>
+</div>
 
-                <button type="button" class="close" ng-click="delete(item)">
-                    <span>&times;</span>
-                    <span>删除</span>
-                </button>
-                <div>
-                    <span class="numbers">{{$index+1}}.</span>
-                    <span>{{item.text}}</span>
-                    <span class="day">{{day}}</span>
-                </div>
-            </li>
-        </ul>
-        <p>
-            总共  {{todolist.length}}  个事项
-        </p>
-    </section>
+<!--content-->
+<div class="scroll-content has-header has-footer overflow-scroll">
+    <div class="card" ng-repeat="item in stars">
+        <div class="item item-avatar-left">
+            <img src="images/lss.jpg">
+            <h3>淘宝服装</h3>
+            <p>2016冬季流行新款</p>
+        </div>
+
+        <div class="item item-image">
+            <img src="images/lss.jpg">
+        </div>
+
+        <div class="item">
+            五星好评:
+            <a href="javascript:;" style="text-decoration: none;" ng-repeat="star in item.content">
+                <i class="icon {{star.icon}}" ng-click="setRating(item.id, star.value)"></i>
+            </a>
+        </div>
+    </div>
+</div>
+
+<!--footer-->
+<div class="bar bar-footer bar-assertive">
+    <h1 class="title">淘宝</h1>
 </div>
 </body>
 </html>
