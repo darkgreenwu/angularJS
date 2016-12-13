@@ -14,3 +14,7 @@ https://darkgreenwu.github.io/SPA/
 ------
 >数据双向绑定验证与提交，使用了Bootstrap作为样式
 https://darkgreenwu.github.io/formValidation/
+
+------
+>email格式登录验证
+https://darkgreenwu.github.io/emailValidation
