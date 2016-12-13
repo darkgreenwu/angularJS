@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html ng-app="myapp">
+<head>
+    <meta charset="UTF-8">
+    <title>web站点入口页面</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="css/font-awesome.css"/>
+    <script src="js/angular.min.js"></script>
+    <script src="js/angular-route.min.js"></script>
+    <script>
+        // 定义主模块，增加对ngRoute路由模块的依赖
+        var myapp = angular.module("myapp", ["ngRoute"]);
+
+        /* 分析：路由映射关系
+         * 当url是"/"，切换是 pages/home.html
+         * 当url是"/about"，切换是 pages/about.html
+         * 当url是"/contact"，切换是 pages/contact.html
+         * 如果请求的url不是上面任何一个，切换的是 pages/routeNofFound.html
+         * */
+        // 配置路由: 注入ngRoute模块提供的一个管理路由的对象 $routeProvider
+        // .config是在框架加载过程中调用的，它是先于控制器执行的
+        myapp.config(function ($routeProvider) {
+            // 当url是"/"，切换是 pages/home.html
+            $routeProvider
+                    .when("/", {
+                        templateUrl: "pages/home.html",
+                        controller: "homeCtrl"
+                    })
+                    .when("/about", {
+                        templateUrl: "pages/about.html",
+                        controller: "aboutCtrl"
+                    })
+                    .when("/contact", {
+                        templateUrl: "pages/contact.html",
+                        controller: "contactCtrl"
+                    })
+//                    指定匹配带参的路由  :id指明在路由中指定的参数的key
+                    .when("/contact?:id", {
+                        templateUrl: "pages/contact.html",
+                        controller: "contactCtrl"
+                    })
+                    .otherwise({
+                        templateUrl: "pages/routeNotFound.html",
+                        controller: "otherCtrl"
+                    });
+        });
+
+        // 为每个子页面绑定控制器
+        myapp.controller("homeCtrl", function ($scope) {
+            $scope.message = "这是Home页面的message";
+        });
+        myapp.controller("aboutCtrl", function ($scope) {
+            $scope.message = "这是About页面的message";
+        });
+        // 解析路由传过来的参数
+        // 框架会自动解析路由参数，并以key-value的形式保存到$routeParams中
+        myapp.controller("contactCtrl", function ($scope,$routeParams) {
+            $scope.message = "这是Contact页面的message";
+
+            // angular框架提供有若干个工具方法，其中.toJson，是用来将js对象转为json
+//            console.log(angular.toJson($routeParams));
+
+            // 拿到传过来的参数id
+            var id = $routeParams.id;
+
+            // 根据不同的id，设置要显示的联系主题
+            switch (id){
+                case "1":
+                    $scope.subject = "建议";break;
+                case "2":
+                    $scope.subject = "询价";break;
+            }
+        });
+
+        myapp.controller("otherCtrl", function ($scope,$location) {
+            $scope.message = "这是Not Found页面的message";
+
+            // 获取url中的hash部分
+            $scope.path = $location.path();
+        });
+
+        myapp.controller("myCtrl", function ($scope) {
+            $scope.msg = "这是来自顶层控制器的message";
+        });
+    </script>
+</head>
+<body ng-controller="myCtrl">
+<header>
+    <!--导航栏：公共部分，不变-->
+    <nav class="navbar navbar-default">
+
+        <div class="container">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#/">我的站点</a>
+            </div>
+
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="#/"><i class="fa fa-home"></i> 主页</a></li>
+                <li><a href="#about"><i class="fa fa-shield"></i> 关于我们</a></li>
+                <li><a href="#contact"><i class="fa fa-comment"></i> 联系我们</a></li>
+            </ul>
+        </div>
+
+    </nav>
+</header>
+
+<div id="main">
+    <!--// 变化的，切换不同的子视图模板-->
+    <div ng-view></div>
+</div>
+
+</body>
+</html>
