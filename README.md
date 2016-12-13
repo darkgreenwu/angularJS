@@ -10,3 +10,7 @@ https://darkgreenwu.github.io/starRating/  
 ------
 >配置的单页面路由程序（SPA企业网站）
 https://darkgreenwu.github.io/SPA/
+
+------
+>数据双向绑定验证与提交，使用了Bootstrap作为样式
+https://darkgreenwu.github.io/formValidation/
