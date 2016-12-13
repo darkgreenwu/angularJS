@@ -3,5 +3,6 @@
 >一个基于angularJS框架的todolist
  https://darkgreenwu.github.io/angularJS/
  
->商城动态五星评价,angularJS实现
-https://darkgreenwu.github.io/starRating/
+ 
+>移动端商城动态五星评价,angularJS实现,请切换到移动端（F12）观看
+https://darkgreenwu.github.io/starRating/   
